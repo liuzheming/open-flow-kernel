@@ -1,0 +1,9 @@
+rootProject.name = 'open-flow-kernel'
+
+include 'flow-kernel-core'
+include 'flow-kernel-engine-camunda'
+include 'flow-kernel-event'
+include 'flow-kernel-form'
+include 'flow-kernel-packet'
+include 'flow-kernel-persistence-jdbc'
+include 'flow-kernel-example'

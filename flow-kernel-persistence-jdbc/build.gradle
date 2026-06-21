@@ -1,0 +1,51 @@
+sourceSets {
+    main {
+        resources {
+            srcDir "${rootDir}/db/schema/h2"
+            include 'open-flow-kernel-jdbc-schema.sql'
+        }
+    }
+    mysqlIntegrationTest {
+        java.srcDir 'src/mysqlIntegrationTest/java'
+        resources.srcDir 'src/mysqlIntegrationTest/resources'
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+configurations {
+    mysqlIntegrationTestImplementation.extendsFrom testImplementation
+    mysqlIntegrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+dependencies {
+    api project(':flow-kernel-core')
+    api project(':flow-kernel-event')
+    api project(':flow-kernel-packet')
+
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core:3.27.3'
+    testImplementation 'com.h2database:h2:2.3.232'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    mysqlIntegrationTestImplementation platform('org.junit:junit-bom:5.11.4')
+    mysqlIntegrationTestImplementation 'org.junit.jupiter:junit-jupiter'
+    mysqlIntegrationTestImplementation 'org.assertj:assertj-core:3.27.3'
+    mysqlIntegrationTestImplementation 'org.testcontainers:junit-jupiter:1.20.4'
+    mysqlIntegrationTestImplementation 'org.testcontainers:mysql:1.20.4'
+    mysqlIntegrationTestRuntimeOnly 'com.mysql:mysql-connector-j:8.4.0'
+    mysqlIntegrationTestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    mysqlIntegrationTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.register('mysqlIntegrationTest', Test) {
+    description = 'Runs MySQL/Testcontainers integration tests for JDBC persistence.'
+    group = 'verification'
+    testClassesDirs = sourceSets.mysqlIntegrationTest.output.classesDirs
+    classpath = sourceSets.mysqlIntegrationTest.runtimeClasspath
+    shouldRunAfter test
+    useJUnitPlatform()
+    systemProperty 'openFlowKernel.rootDir', rootDir.absolutePath
+}

@@ -1,0 +1,4 @@
+dependencies {
+    api project(':flow-kernel-core')
+    api project(':flow-kernel-event')
+}

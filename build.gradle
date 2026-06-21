@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+description = 'Business workflow kernel using Process-Task-Form with Camunda as state machine'
+
+tasks.named('jar') {
+    enabled = false
+}
+
+allprojects {
+    group = 'io.github.openflowkernel'
+    version = '0.1.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    description = "Open Flow Kernel module: ${project.name}"
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = 17
+        options.compilerArgs.addAll(['-Xlint:all', '-Werror'])
+    }
+
+    tasks.withType(Jar).configureEach {
+        manifest {
+            attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Implementation-Vendor': 'open-flow-kernel'
+            )
+        }
+    }
+
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+    }
+}

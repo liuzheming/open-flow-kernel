@@ -1,0 +1,14 @@
+dependencies {
+    implementation project(':flow-kernel-core')
+    implementation project(':flow-kernel-event')
+    implementation project(':flow-kernel-form')
+    implementation project(':flow-kernel-packet')
+
+    testImplementation project(':flow-kernel-persistence-jdbc')
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core:3.27.3'
+    testImplementation 'com.h2database:h2:2.3.232'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
